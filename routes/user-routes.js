@@ -42,5 +42,19 @@ router.get("/:id", ({ params }, res) => {
       .catch((err) => res.status(400).json(err));
 });
 
+router.delete("/delete/:id", ({ params }, res) => {
+  User.findOneAndDelete({ _id: params.id }).then((dbUserData) => {
+    if (!dbUserData) {
+      res.status(404).json({ message: "No user found with this id!" });
+    }
+    Thought.deleteMany({ userId: params.id })
+      .then((dbUserData) => {
+        res.json(dbUserData);
+        return;
+      })
+      .catch((err) => res.status(400).json(err));
+  });
+});
+
 module.exports = router;
   
