@@ -6,6 +6,7 @@ router.post("/create", ({ body }, res) => {
     User.create(body)
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => res.status(400).json(err));
+      console.log(err);
 });
 
 
@@ -56,7 +57,7 @@ router.delete("/delete/:id", ({ params }, res) => {
   });
 });
 
-outer.post("/:userId/friends/:friendId", ({ params }, res) => {
+router.post("/:userId/friends/:friendId", ({ params }, res) => {
   // console.log(params.friendId, "somestring");
   User.findOneAndUpdate(
     { _id: params.userId },
