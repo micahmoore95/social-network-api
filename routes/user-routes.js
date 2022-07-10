@@ -43,6 +43,21 @@ router.get("/:id", ({ params }, res) => {
       .catch((err) => res.status(400).json(err));
 });
 
+router.put("/update/:id", ({ params, body }, res) => {
+  Thought.findOneAndUpdate({ _id: params.id }, body, {
+    new: true,
+    runValidators: true,
+  })
+    .then((dbThoughtData) => {
+      if (!dbThoughtData) {
+        res.status(404).json({ message: "No thought found with this id!" });
+        return;
+      }
+      res.json(dbThoughtData);
+    })
+    .catch((err) => res.status(400).json(err));
+});
+
 router.delete("/delete/:id", ({ params }, res) => {
   User.findOneAndDelete({ _id: params.id }).then((dbUserData) => {
     if (!dbUserData) {

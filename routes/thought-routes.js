@@ -70,4 +70,29 @@ router.post("/:thoughtId/reactions", ({ body, params }, res) => {
       .catch((err) => res.status(400).json(err));
   });
 
+  router.put("/update/:id", ({ params, body }, res) => {
+    Thought.findOneAndUpdate({ _id: params.id }, body, {
+      new: true,
+      runValidators: true,
+    })
+      .then((dbThoughtData) => {
+        if (!dbThoughtData) {
+          res.status(404).json({ message: "No thought found with this id!" });
+          return;
+        }
+        res.json(dbThoughtData);
+      })
+      .catch((err) => res.status(400).json(err));
+  });
+
+  router.delete("/:thoughtId/reactions/:reactionId", ({ params }, res) => {
+    Thought.findOneAndUpdate(
+      { _id: params.thoughtId },
+      { $pull: { reactions: { reactionId: params.reactionId } } },
+      { new: true }
+    )
+      .then((dbThoughtData) => res.json(dbThoughtData))
+      .catch((err) => res.status(400).json(err));
+  });
+
   module.exports = router;
